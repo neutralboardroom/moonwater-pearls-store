@@ -1,0 +1,15 @@
+{
+  "name": "moonwater-pearls-render-clone",
+  "version": "0.2.3",
+  "description": "Low-cost Shopify-style Moonwater Pearls site for Render with exact-piece catalog and Stripe Checkout.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --check server.js && node scripts/check.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {}
+}
