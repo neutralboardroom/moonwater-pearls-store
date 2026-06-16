@@ -1,4 +1,4 @@
-# Moonwater Pearls replacement site v0.2.3
+# Moonwater Pearls replacement site v0.2.4
 
 This is a low-cost Shopify-style replacement for Moonwater Pearls that can run on Render as a Node web service on the free plan while sales are being tested.
 

@@ -29,8 +29,8 @@
     return `<div class="cart-line"><img src="${p.image}" alt=""><div><h3>${escapeHtml(p.title)}</h3><p>${money(p.price)} × ${q}</p><button type="button" data-remove-item="${p.id}">Remove</button></div><strong>${money(p.price*q)}</strong></div>`;
   }
   function escapeHtml(s){ return String(s).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
-  function openCart(){ const d=document.querySelector('[data-cart-drawer]'), o=document.querySelector('[data-cart-overlay]'); if(d){d.classList.add('open');d.setAttribute('aria-hidden','false')} if(o)o.hidden=false; }
-  function closeCart(){ const d=document.querySelector('[data-cart-drawer]'), o=document.querySelector('[data-cart-overlay]'); if(d){d.classList.remove('open');d.setAttribute('aria-hidden','true')} if(o)o.hidden=true; }
+  function openCart(){ const d=document.querySelector('[data-cart-drawer]'), o=document.querySelector('[data-cart-overlay]'); if(d){d.classList.add('open');d.setAttribute('aria-hidden','false')} if(o){o.hidden=false;o.classList.remove('hidden');} }
+  function closeCart(){ const d=document.querySelector('[data-cart-drawer]'), o=document.querySelector('[data-cart-overlay]'); if(d){d.classList.remove('open');d.setAttribute('aria-hidden','true')} if(o){o.hidden=true;o.classList.add('hidden');} }
   document.addEventListener('submit', e => {
     const form = e.target.closest('[data-add-product]');
     if(form){ e.preventDefault(); addItem(form.dataset.addProduct, Number(new FormData(form).get('quantity') || 1)); }
@@ -42,10 +42,11 @@
     const thumb = e.target.closest('[data-thumb]');
     if(thumb){ document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active')); thumb.classList.add('active'); const main=document.querySelector('[data-main-image]'); if(main){ main.src=thumb.dataset.thumb; if(thumb.dataset.thumbAlt) main.alt=thumb.dataset.thumbAlt; } }
     if(e.target.closest('[data-search-open]')) openSearch();
-    if(e.target.closest('[data-search-close]')) closeSearch();
+    if(e.target.closest('[data-search-close]') || e.target.matches('[data-search-modal]')) closeSearch();
   });
-  function openSearch(){ const m=document.querySelector('[data-search-modal]'); if(m){ m.hidden=false; const input=m.querySelector('[data-search-input]'); if(input) setTimeout(()=>input.focus(),50); renderSearch(''); } }
-  function closeSearch(){ const m=document.querySelector('[data-search-modal]'); if(m)m.hidden=true; }
+  function openSearch(){ const m=document.querySelector('[data-search-modal]'); if(m){ m.hidden=false; m.classList.remove('hidden'); const input=m.querySelector('[data-search-input]'); if(input) setTimeout(()=>input.focus(),50); renderSearch(''); } }
+  function closeSearch(){ const m=document.querySelector('[data-search-modal]'); if(m){ m.hidden=true; m.classList.add('hidden'); } }
+  document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeSearch(); closeCart(); } });
   const searchInput = document.querySelector('[data-search-input]');
   if(searchInput) searchInput.addEventListener('input', e => renderSearch(e.target.value));
   function renderSearch(q){ const box=document.querySelector('[data-search-results]'); if(!box)return; const term=(q||'').toLowerCase().trim(); const matches=term?products.filter(p => (p.title+' '+p.priceText).toLowerCase().includes(term)):products.slice(0,5); box.innerHTML = matches.map(p=>`<a class="search-result" href="/products/${p.handle}"><img src="${p.image}" alt=""><span>${escapeHtml(p.title)}<br><strong>${p.priceText}</strong></span></a>`).join(''); }

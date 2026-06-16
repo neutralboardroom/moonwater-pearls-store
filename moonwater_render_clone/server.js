@@ -7,7 +7,7 @@ const { products, productByHandle } = require('./data/catalog');
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const BRAND_PHONE = process.env.BRAND_PHONE || '1-800-363-4719';
-const VERSION = '0.2.3';
+const VERSION = '0.2.4';
 
 function money(cents) {
   return `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;

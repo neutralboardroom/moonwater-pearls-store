@@ -53,8 +53,14 @@ async function main(){
 
   const health = await (await fetch(base + '/health')).json();
   assert.strictEqual(health.ok, true);
-  assert.strictEqual(health.version, '0.2.3');
+  assert.strictEqual(health.version, '0.2.4');
   assert.strictEqual(health.products, products.length);
+
+  const styles = fs.readFileSync(path.join(__dirname, '..', 'public', 'styles.css'), 'utf8');
+  const appJs = fs.readFileSync(path.join(__dirname, '..', 'public', 'app.js'), 'utf8');
+  assert(styles.includes('[hidden]{display:none!important}'), 'Hidden attribute must force hidden display so search modal closes');
+  assert(appJs.includes("m.classList.add('hidden')"), 'Search modal close should add hidden class');
+  assert(appJs.includes("e.key === 'Escape'"), 'Escape key should close search/cart overlays');
   assert.strictEqual(products.length, 9, 'Expected 9 live products from the current Shopify collection');
   assert(products.some(p => p.handle === '9-11mm-natural-deep-purple-edison-pearl-necklace'), 'Missing live Edison pearl necklace product');
   assert(products.some(p => p.handle === '8-11mm-tahitian-baroque-pearl-necklace-exact-piece-reserved' && p.priceText === '$695.00 USD'), 'Tahitian baroque necklace price should match live site');
